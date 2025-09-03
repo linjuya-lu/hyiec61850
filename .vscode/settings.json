@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.scd": "xml",
+        "stdlib.h": "c",
+        "hal_thread.h": "c",
+        "iec61850_client.h": "c",
+        "stdio.h": "c",
+        "iec61850_server.h": "c",
+        "static_model.h": "c",
+        "goose_receiver.h": "c",
+        "signal.h": "c"
+    }
+}

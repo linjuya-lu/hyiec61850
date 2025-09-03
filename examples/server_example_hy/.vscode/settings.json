@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.scd": "xml",
+        "math.h": "c",
+        "static_model.h": "c"
+    }
+}

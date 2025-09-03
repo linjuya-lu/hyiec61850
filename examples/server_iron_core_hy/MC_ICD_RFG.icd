@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- edited with XMLSpy v2009 (http://www.altova.com) by XHP-2021 (EMBRACE) -->
+<SCL xmlns="http://www.iec.ch/61850/2003/SCL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iec.ch/61850/2003/SCL SCL.xsd">
+	<Header id="TEMPLATE" nameStructure="IEDName" revision="1.0" toolID="RJMC-ICDTools" version="V1.59">
+		<History>
+			<Hitem revision="1.0" version="7.0" what="" when="2013年9月4日 16:38:39" who="RJMC" why=""/>
+			<Hitem revision="1.0" version="6.0" what="" when="2013年9月4日 16:38:39" who="RJMC" why=""/>
+			<Hitem revision="1.0" version="5.0" what="" when="2013年9月4日 16:38:39" who="RJMC" why=""/>
+			<Hitem revision="1.0" version="2.4" what="工具首次生成ICD文件" when="2025年08月27日 22:21:24" who="NAVY" why=""/>
+		</History>
+	</Header>
+	<Communication>
+		<SubNetwork name="Subnet_MMS" type="8-MMS">
+			<BitRate multiplier="M" unit="b/s">10</BitRate>
+			<ConnectedAP apName="S1" iedName="MC6000">
+				<Address>
+					<P type="OSI-AP-Title">1,3,9999,33</P>
+					<P type="OSI-AE-Qualifier">33</P>
+					<P type="OSI-PSEL">00000001</P>
+					<P type="OSI-SSEL">0001</P>
+					<P type="OSI-TSEL">0001</P>
+					<P type="IP">172.16.19.101</P>
+				</Address>
+			</ConnectedAP>
+		</SubNetwork>
+	</Communication>
+	<IED configVersion="V2.00" desc="通讯网关" manufacturer="RJMC" name="MC6000" type="MC6000">
+		<Services>
+			<DynAssociation/>
+			<SettingGroups>
+				<SGEdit/>
+				<ConfSG/>
+			</SettingGroups>
+			<GetDirectory/>
+			<GetDataObjectDefinition/>
+			<DataObjectDirectory/>
+			<GetDataSetValue/>
+			<DataSetDirectory/>
+			<ConfDataSet max="64" maxAttributes="256"/>
+			<ReadWrite/>
+			<ConfReportControl max="64"/>
+			<GetCBValues/>
+			<ConfLogControl max="16"/>
+			<ReportSettings bufTime="Dyn" cbName="Conf" datSet="Conf" intgPd="Dyn" optFields="Conf" rptID="Conf" trgOps="Dyn"/>
+			<LogSettings cbName="Conf" datSet="Conf" intgPd="Dyn" logEna="Dyn" trgOps="Dyn"/>
+			<GOOSE max="16"/>
+			<FileHandling/>
+			<ConfLNs fixLnInst="true" fixPrefix="true"/>
+		</Services>
+		<AccessPoint clock="false" desc="通讯网关" name="S1" router="false">
+			<Server desc="61850" timeout="30">
+				<Authentication/>
+				<LDevice desc="检测" inst="MONT">
+					<LN0 desc="装置逻辑节点" inst="" lnClass="LLN0" lnType="JY42_LK_LLNO_FK">
+						<DataSet desc="遥测数据集1" name="dsAin1">
+							<FCDA doName="CGAmp" fc="MX" ldInst="MONT" lnClass="SPTR" lnInst="1" prefix="CCM"/>
+							<FCDA doName="ClpGAmp" fc="MX" ldInst="MONT" lnClass="SPTR" lnInst="1" prefix="CCM"/>
+						</DataSet>
+						<DataSet desc="告警数据集1" name="dsAlarm1">
+							<FCDA doName="Alm1" fc="ST" ldInst="MONT" lnClass="GGIO" lnInst="1" prefix="DGM"/>
+							<FCDA doName="Alm2" fc="ST" ldInst="MONT" lnClass="GGIO" lnInst="1" prefix="DGM"/>
+							<FCDA doName="Alm3" fc="ST" ldInst="MONT" lnClass="GGIO" lnInst="1" prefix="DGM"/>
+							<FCDA doName="CGAlm" fc="ST" ldInst="MONT" lnClass="SPTR" lnInst="1" prefix="CCM"/>
+							<FCDA doName="ClpGAlm" fc="ST" ldInst="MONT" lnClass="SPTR" lnInst="1" prefix="CCM"/>
+						</DataSet>
+						<ReportControl buffered="false" confRev="1" datSet="dsAin1" desc="遥测非缓存报告" intgPd="10000" name="urcbAin1" rptID="MC6000MONT/LLN0$urcbAin1">
+							<TrgOps dchg="true" dupd="false" period="true" qchg="true"/>
+							<OptFields configRef="true" dataRef="true" dataSet="true" reasonCode="true" seqNum="true" timeStamp="true"/>
+							<RptEnabled max="16"/>
+						</ReportControl>
+						<ReportControl buffered="true" confRev="1" datSet="dsAlarm1" desc="告警缓存报告1" intgPd="10000" name="brcbAlarm1" rptID="MONT/LLN0$brcbAlarm1">
+							<TrgOps dchg="true" dupd="false" period="false" qchg="true"/>
+							<OptFields configRef="true" dataRef="true" dataSet="true" entryID="true" reasonCode="true" seqNum="true" timeStamp="true"/>
+							<RptEnabled max="16"/>
+						</ReportControl>
+					</LN0>
+					<LN desc="物理逻辑节点" inst="1" lnClass="LPHD" lnType="LK_LPHD_FK"/>
+					<LN desc="铁心接地电流监测" inst="1" lnClass="SPTR" lnType="ZXJC_TXJD_I" prefix="CCM">
+						<DOI desc="铁芯接地电流" name="CGAmp">
+							<DAI name="d">
+								<Val/>
+							</DAI>
+							<SDI name="mag">
+								<DAI name="f" sAddr="Gin_04/0000"/>
+							</SDI>
+							<DAI name="dU">
+								<Val>铁芯接地电流</Val>
+							</DAI>
+						</DOI>
+						<DOI desc="夹件接地电流" name="ClpGAmp">
+							<DAI name="d">
+								<Val/>
+							</DAI>
+							<SDI name="mag">
+								<DAI name="f" sAddr="Gin_04/0001"/>
+							</SDI>
+							<DAI name="dU">
+								<Val>夹件接地电流</Val>
+							</DAI>
+						</DOI>
+						<DOI desc="铁心接地电流值报警" name="CGAlm">
+							<DAI name="stVal" sAddr="Gin_03/0000"/>
+							<DAI name="dU">
+								<Val>铁心接地电流值报警</Val>
+							</DAI>
+						</DOI>
+						<DOI desc="夹件接地电流值报警" name="ClpGAlm">
+							<DAI name="d">
+								<Val/>
+							</DAI>
+							<DAI name="stVal" sAddr="Gin_03/0001"/>
+							<DAI name="dU">
+								<Val>夹件接地电流值报警</Val>
+							</DAI>
+						</DOI>
+					</LN>
+					<LN desc="在线监测装置自身告警信息" inst="1" lnClass="GGIO" lnType="ZXJC_SELF_ALM" prefix="DGM">
+						<DOI desc="主控单元自身工作状态异常" name="Alm1">
+							<DAI name="d">
+								<Val/>
+							</DAI>
+							<DAI name="stVal" sAddr="Gin_03/0002"/>
+							<DAI name="dU">
+								<Val>主控单元自身工作状态异常</Val>
+							</DAI>
+						</DOI>
+						<DOI desc="主控单元时钟同步信号丢失" name="Alm2">
+							<DAI name="stVal" sAddr="Gin_03/0003"/>
+							<DAI name="dU">
+								<Val>主控单元时钟同步信号丢失</Val>
+							</DAI>
+						</DOI>
+						<DOI desc="被监测设备停运" name="Alm3">
+							<DAI name="stVal" sAddr="Gin_03/0004"/>
+							<DAI name="dU">
+								<Val>被监测设备停运</Val>
+							</DAI>
+						</DOI>
+					</LN>
+				</LDevice>
+			</Server>
+		</AccessPoint>
+	</IED>
+	<DataTypeTemplates>
+		<LNodeType desc="台账信息" id="QY_GDNZ_LD0_V01_SCIF" lnClass="LXHD">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="性能" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康状态" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="QY_CN_LPL_EX"/>
+			<DO desc="电压等级" name="PwrLev" type="QY_CN_STG_SP_EX"/>
+			<DO desc="制造厂商" name="Vendor" type="QY_CN_STG_SP_EX"/>
+			<DO desc="装置型号" name="DevTyp" type="QY_CN_STG_SP_EX"/>
+			<DO desc="出厂日期" name="MnfDate" type="QY_CN_STG_SP_EX"/>
+			<DO desc="投运日期" name="RunDate" type="QY_CN_STG_SP_EX"/>
+			<DO desc="装置程序版本号" name="SwRev" type="QY_CN_STG_SP_EX"/>
+			<DO desc="程序日期" name="SwDate" type="QY_CN_STG_SP_EX"/>
+			<DO desc="系统（磁盘）容量G" name="SysDskCap" type="QY_CN_STG_SP_EX"/>
+			<DO desc="设备类型" name="Devtype" type="QY_CN_STG_SP_EX"/>
+			<DO desc="设备名称" name="Devname" type="QY_CN_STG_SP_EX"/>
+			<DO desc="中文描述" name="Devdesc" type="QY_CN_STG_SP_EX"/>
+			<DO desc="设备型号" name="Devmodel" type="QY_CN_STG_SP_EX"/>
+			<DO desc="生产厂家" name="Manufacturer" type="QY_CN_STG_SP_EX"/>
+			<DO desc="生产国家" name="Madein" type="QY_CN_STG_SP_EX"/>
+			<DO desc="出厂编号" name="Productionnum" type="QY_CN_STG_SP_EX"/>
+			<DO desc="出厂日期" name="Productiondate" type="QY_CN_STG_SP_EX"/>
+			<DO desc="实物 ID" name="PhyassetID" type="QY_CN_STG_SP_EX"/>
+			<DO desc="相对空间位置 x" name="PositionX" type="QY_CN_STG_SP_EX"/>
+			<DO desc="相对空间位置 y" name="PositionY" type="QY_CN_STG_SP_EX"/>
+			<DO desc="所属区域标识" name="Region" type="QY_CN_STG_SP_EX"/>
+			<DO desc="所属屏柜" name="Cabinet" type="QY_CN_STG_SP_EX"/>
+		</LNodeType>
+		<LNodeType desc="对时自检信息" id="LK_LTSM_FK" lnClass="LTSM">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="对时信号状态" name="HostTPortAlarm" type="CN_SPS"/>
+			<DO desc="对时服务状态" name="HostTSrvAlarm" type="CN_SPS"/>
+			<DO desc="对时跳变侦测状态" name="HostContAlarm" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="物理逻辑节点" id="LK_LPHD_FK" lnClass="LPHD">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="性能" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康状态" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="QY_CN_LPL_EX"/>
+			<DO desc="标识" name="PhyNam" type="CN_DPL"/>
+			<DO desc="健康" name="PhyHealth" type="CN_INS_Health"/>
+			<DO desc="代理" name="Proxy" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="电源电压监视" id="JY42_LK_SPVT_FK" lnClass="SPVT">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="告警" name="Alm" type="CN_SPS"/>
+			<DO desc="预警" name="Wrn" type="CN_SPS"/>
+			<DO desc="电压裕度" name="VolMrg" type="CN_INS"/>
+			<DO desc="电压" name="Vol" type="JY42_CN_MV"/>
+			<DO desc="电压2" name="Vol1" type="JY42_CN_MV"/>
+			<DO desc="电压3" name="Vol2" type="JY42_CN_MV"/>
+			<DO desc="电压4" name="Vol3" type="JY42_CN_MV"/>
+			<DO desc="电压5" name="Vol4" type="JY42_CN_MV"/>
+			<DO desc="告警上限定值" name="VolAlmUSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="告警下限定值" name="VolAlmLSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="预警上限定值" name="VolWrnUSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="预警下限定值" name="VolWrnLSpt" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="母线电压监测" id="JY42_LK_BUSVOL_FK" lnClass="GGIO">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="系统电压" name="VolXB1" type="JY42_CN_MV"/>
+			<DO desc="系统电压3次谐波" name="VolXB3" type="JY42_CN_MV"/>
+			<DO desc="系统电压5次谐波" name="VolXB5" type="JY42_CN_MV"/>
+			<DO desc="系统电压7次谐波" name="VolXB7" type="JY42_CN_MV"/>
+			<DO desc="系统电压9次谐波" name="VolXB9" type="JY42_CN_MV"/>
+			<DO desc="系统频率" name="VolFreq" type="JY42_CN_MV"/>
+			<DO desc="IED与监测设备通讯异常" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备运行异常" name="SupDevRun" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="模拟量设数" id="JY42_LK_GGIO_SV" lnClass="GGIO">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="设值1" name="Set1" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值2" name="Set2" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值3" name="Set3" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值4" name="Set4" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值5" name="Set5" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值6" name="Set6" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值7" name="Set7" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值8" name="Set8" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值9" name="Set9" type="JY42_CN_ASG_SP"/>
+			<DO desc="设值10" name="Set10" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="铁芯接地监测" id="JY42_LK_TXJD_FK" lnClass="GGIO">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="铁芯全电流" name="Ain1" type="JY42_CN_MV"/>
+			<DO desc="夹件接地电流" name="Ain2" type="JY42_CN_MV"/>
+			<DO desc="IED与监测设备通讯异常" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备运行异常" name="SupDevRun" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="录波节点" id="LK_RDRE_FK" lnClass="RDRE">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="录播完成" name="RcdMade" type="CN_SPS"/>
+			<DO desc="故障序号" name="FltNum" type="CN_INS"/>
+			<DO desc="电网故障序号" name="GriFltNum" type="CN_INS"/>
+		</LNodeType>
+		<LNodeType desc="逻辑节点装置" id="JY42_LK_LLNO_FK" lnClass="LLN0">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL_LN0"/>
+			<DO desc="LED复位" name="LEDRs" type="JY42_CN_SPC"/>
+		</LNodeType>
+		<LNodeType desc="油色谱监测" id="JY42_LK_SIML_FK" lnClass="SIML">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="监测装置通信状态" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备自检异常" name="SupDevRun" type="CN_SPS"/>
+			<DO desc="油色谱装置载气压力" name="Alm1" type="CN_SPS"/>
+			<DO desc="乙炔浓度注意" name="Alm2" type="CN_SPS"/>
+			<DO desc="乙炔浓度告警" name="Alm3" type="CN_SPS"/>
+			<DO desc="氢气浓度注意" name="Alm4" type="CN_SPS"/>
+			<DO desc="氢气浓度告警" name="Alm5" type="CN_SPS"/>
+			<DO desc="一氧化碳浓度注意" name="Alm6" type="CN_SPS"/>
+			<DO desc="一氧化碳浓度告警" name="Alm7" type="CN_SPS"/>
+			<DO desc="二氧化碳浓度注意" name="Alm8" type="CN_SPS"/>
+			<DO desc="二氧化碳浓度告警" name="Alm9" type="CN_SPS"/>
+			<DO desc="甲烷浓度注意" name="Alm10" type="CN_SPS"/>
+			<DO desc="甲烷浓度告警" name="Alm11" type="CN_SPS"/>
+			<DO desc="乙烯浓度注意" name="Alm12" type="CN_SPS"/>
+			<DO desc="乙烯浓度告警" name="Alm13" type="CN_SPS"/>
+			<DO desc="乙烷浓度注意" name="Alm14" type="CN_SPS"/>
+			<DO desc="乙烷浓度告警" name="Alm15" type="CN_SPS"/>
+			<DO desc="总烃浓度注意" name="Alm16" type="CN_SPS"/>
+			<DO desc="总烃浓度告警" name="Alm17" type="CN_SPS"/>
+			<DO desc="氢气测量值注意设定" name="H2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="一氧化碳测量值注意设定" name="COppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="二氧化碳测量值注意设定" name="CO2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="甲烷测量值注意设定" name="CH4ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烯测量值注意设定" name="C2H4ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙炔测量值注意设定" name="C2H2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烷测量值注意设定" name="C2H6ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="总烃测量值注意设定" name="Totalhydrs1" type="JY42_CN_ASG_SP"/>
+			<DO desc="氢气测量值告警设定" name="H2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="一氧化碳测量值告警设定" name="COppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="二氧化碳测量值告警设定" name="CO2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="甲烷测量值告警设定" name="CH4ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烯测量值告警设定" name="C2H4ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙炔测量值告警设定" name="C2H2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烷测量值告警设定" name="C2H6ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="总烃测量值告警设定" name="Totalhydrs2" type="JY42_CN_ASG_SP"/>
+			<DO desc="氢气测量值" name="H2ppm" type="JY42_CN_MV"/>
+			<DO desc="一氧化碳测量值" name="COppm" type="JY42_CN_MV"/>
+			<DO desc="二氧化碳测量值" name="CO2ppm" type="JY42_CN_MV"/>
+			<DO desc="甲烷测量值" name="CH4ppm" type="JY42_CN_MV"/>
+			<DO desc="乙烯测量值" name="C2H4ppm" type="JY42_CN_MV"/>
+			<DO desc="乙炔测量值" name="C2H2ppm" type="JY42_CN_MV"/>
+			<DO desc="乙烷测量值" name="C2H6ppm" type="JY42_CN_MV"/>
+			<DO desc="总烃测量值" name="Totalhydr" type="JY42_CN_MV"/>
+			<DO desc="总可燃气测量值" name="Totalgas" type="JY42_CN_MV"/>
+			<DO desc="微水含量" name="Mst" type="JY42_CN_MV"/>
+			<DO desc="采样时间间隔控制" name="SmpProd" type="JY42_CN_ASG_SP"/>
+			<DO desc="立即开始工作" name="StartWork" type="JY42_CN_ASG_SP"/>
+			<DO desc="下次采样时间" name="NextWorkTime" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="装置温度逻辑节点" id="JY42_LK_STMP_FK" lnClass="STMP">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="装置温度" name="Tmp" type="JY42_CN_MV"/>
+			<DO desc="温度告警" name="Alm" type="CN_SPS"/>
+			<DO desc="温度预警" name="Wrn" type="CN_SPS"/>
+			<DO desc="温度裕度" name="TmpMrg" type="JY42_CN_MV"/>
+			<DO desc="温度告警定值" name="MemRatAlmSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="温度预警定值" name="MemRatWrnSpt" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="CPU监测" id="JY42_LK_SCPU_FK" lnClass="SCPU">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="CPU告警" name="Alm" type="CN_SPS"/>
+			<DO desc="CPU预警" name="Wrn" type="CN_SPS"/>
+			<DO desc="CPU负载率" name="CpuRat" type="JY42_CN_MV"/>
+			<DO desc="CPU告警定值" name="CpuRatAlmSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="CPU预警定值" name="CpuRatWrnSpt" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="容性设备监测" id="JY42_LK_RXSB_FK" lnClass="GGIO">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="全电流" name="Ain1" type="JY42_CN_MV"/>
+			<DO desc="阻性电流" name="Ain2" type="JY42_CN_MV"/>
+			<DO desc="容性性电流" name="Ain3" type="JY42_CN_MV"/>
+			<DO desc="电容量" name="Ain4" type="JY42_CN_MV"/>
+			<DO desc="介质损耗因数" name="Ain5" type="JY42_CN_MV"/>
+			<DO desc="IED与监测设备通讯异常" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备运行异常" name="SupDevRun" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="硬盘监测" id="JY42_LK_SDSK_FK" lnClass="SDSK">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="硬盘告警" name="Alm" type="CN_SPS"/>
+			<DO desc="硬盘预警" name="Wrn" type="CN_SPS"/>
+			<DO desc="硬盘使用率" name="DiskRat" type="JY42_CN_MV"/>
+			<DO desc="硬盘告警定值" name="DiskSizeAlmSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="硬盘预警定值" name="DiskSizeWrnSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="硬盘容量" name="DiskSizeSpt" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="局放监测" id="JY42_LK_SPDC_FK" lnClass="SPDC">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="局部放电告警" name="PaDschAlm" type="CN_SPS"/>
+			<DO desc="动作次数" name="OpCnt" type="CN_INS"/>
+			<DO desc="局部放电报警级别" name="AlmLevel" type="JY42_CN_MV"/>
+			<DO desc="局部最大放电量" name="MaxDiscgCap" type="JY42_CN_MV"/>
+			<DO desc="局部平均放电位置" name="NQS" type="JY42_CN_MV"/>
+			<DO desc="局部放电位置" name="DiscgPos" type="JY42_CN_MV"/>
+			<DO desc="放电次数总和" name="PulsCount" type="JY42_CN_MV"/>
+			<DO desc="局部放电相位" name="DiscgPhase" type="JY42_CN_MV"/>
+			<DO desc="放电波形" name="DiscgWav" type="JY42_CN_MV"/>
+			<DO desc="局部放电类型" name="DiscgType" type="JY42_CN_MV"/>
+			<DO desc="IED与监测设备通讯异常" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备运行异常" name="SupDevRun" type="CN_SPS"/>
+		</LNodeType>
+		<LNodeType desc="内存监测" id="JY42_LK_SMEM_FK" lnClass="SMEM">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="内存告警" name="Alm" type="CN_SPS"/>
+			<DO desc="内存预警" name="Wrn" type="CN_SPS"/>
+			<DO desc="内存使用率" name="MemRat" type="JY42_CN_MV"/>
+			<DO desc="内存告警定值" name="MemRatAlmSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="内存预警定值" name="MemRatWrnSpt" type="JY42_CN_ASG_SP"/>
+			<DO desc="内存容量" name="MemSizeSpt" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="在线监测装置自身告警信息" id="ZXJC_SELF_ALM" lnClass="GGIO">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="监测装置通信状态" name="MoDevConf" type="CN_SPS"/>
+			<DO desc="监测设备自检异常" name="SupDevRun" type="CN_SPS"/>
+			<DO desc="主控单元自身工作状态异常" name="Alm1" type="CN_SPS"/>
+			<DO desc="主控单元时钟同步信号丢失" name="Alm2" type="CN_SPS"/>
+			<DO desc="被监测设备停运" name="Alm3" type="CN_SPS"/>
+			<DO desc="氢气浓度注意" name="Alm4" type="CN_SPS"/>
+			<DO desc="氢气浓度告警" name="Alm5" type="CN_SPS"/>
+			<DO desc="一氧化碳浓度注意" name="Alm6" type="CN_SPS"/>
+			<DO desc="一氧化碳浓度告警" name="Alm7" type="CN_SPS"/>
+			<DO desc="二氧化碳浓度注意" name="Alm8" type="CN_SPS"/>
+			<DO desc="二氧化碳浓度告警" name="Alm9" type="CN_SPS"/>
+			<DO desc="甲烷浓度注意" name="Alm10" type="CN_SPS"/>
+			<DO desc="甲烷浓度告警" name="Alm11" type="CN_SPS"/>
+			<DO desc="乙烯浓度注意" name="Alm12" type="CN_SPS"/>
+			<DO desc="乙烯浓度告警" name="Alm13" type="CN_SPS"/>
+			<DO desc="乙烷浓度注意" name="Alm14" type="CN_SPS"/>
+			<DO desc="乙烷浓度告警" name="Alm15" type="CN_SPS"/>
+			<DO desc="总烃浓度注意" name="Alm16" type="CN_SPS"/>
+			<DO desc="总烃浓度告警" name="Alm17" type="CN_SPS"/>
+			<DO desc="氢气测量值注意设定" name="H2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="一氧化碳测量值注意设定" name="COppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="二氧化碳测量值注意设定" name="CO2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="甲烷测量值注意设定" name="CH4ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烯测量值注意设定" name="C2H4ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙炔测量值注意设定" name="C2H2ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烷测量值注意设定" name="C2H6ppms1" type="JY42_CN_ASG_SP"/>
+			<DO desc="总烃测量值注意设定" name="Totalhydrs1" type="JY42_CN_ASG_SP"/>
+			<DO desc="氢气测量值告警设定" name="H2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="一氧化碳测量值告警设定" name="COppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="二氧化碳测量值告警设定" name="CO2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="甲烷测量值告警设定" name="CH4ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烯测量值告警设定" name="C2H4ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙炔测量值告警设定" name="C2H2ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="乙烷测量值告警设定" name="C2H6ppms2" type="JY42_CN_ASG_SP"/>
+			<DO desc="总烃测量值告警设定" name="Totalhydrs2" type="JY42_CN_ASG_SP"/>
+			<DO desc="氢气测量值" name="H2ppm" type="JY42_CN_MV"/>
+			<DO desc="一氧化碳测量值" name="COppm" type="JY42_CN_MV"/>
+			<DO desc="二氧化碳测量值" name="CO2ppm" type="JY42_CN_MV"/>
+			<DO desc="甲烷测量值" name="CH4ppm" type="JY42_CN_MV"/>
+			<DO desc="乙烯测量值" name="C2H4ppm" type="JY42_CN_MV"/>
+			<DO desc="乙炔测量值" name="C2H2ppm" type="JY42_CN_MV"/>
+			<DO desc="乙烷测量值" name="C2H6ppm" type="JY42_CN_MV"/>
+			<DO desc="总烃测量值" name="Totalhydr" type="JY42_CN_MV"/>
+			<DO desc="总可燃气测量值" name="Totalgas" type="JY42_CN_MV"/>
+			<DO desc="微水含量" name="Mst" type="JY42_CN_MV"/>
+			<DO desc="采样时间间隔控制" name="SmpProd" type="JY42_CN_ASG_SP"/>
+			<DO desc="立即开始工作" name="StartWork" type="JY42_CN_ASG_SP"/>
+			<DO desc="下次采样时间" name="NextWorkTime" type="JY42_CN_ASG_SP"/>
+		</LNodeType>
+		<LNodeType desc="铁心接地电流监测" id="ZXJC_TXJD_I" lnClass="SPTR">
+			<DO desc="模式" name="Mod" type="CN_INC_Mod_GZK"/>
+			<DO desc="行为" name="Beh" type="CN_INS_Beh"/>
+			<DO desc="健康" name="Health" type="CN_INS_Health"/>
+			<DO desc="铭牌" name="NamPlt" type="CN_LPL"/>
+			<DO desc="铁芯接地电流" name="CGAmp" type="JY42_CN_MV"/>
+			<DO desc="夹件接地电流" name="ClpGAmp" type="JY42_CN_MV"/>
+			<DO desc="铁心接地电流值报警" name="CGAlm" type="CN_SPS"/>
+			<DO desc="夹件接地电流值报警" name="ClpGAlm" type="CN_SPS"/>
+		</LNodeType>
+		<DOType cdc="INC" id="CN_INC_Mod_GZK">
+			<DA bType="Enum" dchg="true" fc="ST" name="stVal" type="Mod"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="Enum" fc="CF" name="ctlModel" type="ctlModel">
+				<Val>0</Val>
+			</DA>
+			<DA bType="VisString255" fc="DC" name="d"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+		</DOType>
+		<DOType cdc="LPL" id="CN_LPL">
+			<DA bType="VisString255" fc="DC" name="vendor"/>
+			<DA bType="VisString255" fc="DC" name="swRev"/>
+			<DA bType="VisString255" fc="DC" name="swDate"/>
+			<DA bType="VisString255" fc="DC" name="swRevCrc"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+		</DOType>
+		<DOType cdc="LPL" id="CN_LPL_LN0">
+			<DA bType="VisString255" fc="DC" name="vendor"/>
+			<DA bType="VisString255" fc="DC" name="swRev"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="configRev"/>
+			<DA bType="VisString255" fc="EX" name="ldNs">
+				<Val>IEC 61850-7-4:2003</Val>
+			</DA>
+		</DOType>
+		<DOType cdc="DPL" id="CN_DPL">
+			<DA bType="VisString255" fc="DC" name="vendor"/>
+			<DA bType="VisString255" fc="DC" name="hwRev"/>
+			<DA bType="VisString255" fc="DC" name="swRev"/>
+			<DA bType="VisString255" fc="DC" name="swRevCrc"/>
+			<DA bType="VisString255" fc="DC" name="swDate"/>
+			<DA bType="VisString255" fc="DC" name="adSwRev"/>
+			<DA bType="VisString255" fc="DC" name="adSwRevCrc"/>
+			<DA bType="VisString255" fc="DC" name="adSwDate"/>
+			<DA bType="VisString255" fc="DC" name="serNum"/>
+			<DA bType="VisString255" fc="DC" name="model"/>
+			<DA bType="VisString255" fc="DC" name="location"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="INS" id="CN_INS_Health">
+			<DA bType="Enum" dchg="true" fc="ST" name="stVal" type="Health"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="INS" id="CN_INS_Beh">
+			<DA bType="Enum" dchg="true" fc="ST" name="stVal" type="Beh"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="INS" id="CN_INS">
+			<DA bType="INT32" dchg="true" fc="ST" name="stVal"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="BOOLEAN" fc="SV" name="subEna"/>
+			<DA bType="INT32" fc="SV" name="subVal"/>
+			<DA bType="Quality" fc="SV" name="subQ"/>
+			<DA bType="VisString64" fc="SV" name="subID"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="SPS" id="CN_SPS">
+			<DA bType="BOOLEAN" dchg="true" fc="ST" name="stVal"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="BOOLEAN" fc="SV" name="subEna"/>
+			<DA bType="BOOLEAN" fc="SV" name="subVal"/>
+			<DA bType="Quality" fc="SV" name="subQ"/>
+			<DA bType="VisString64" fc="SV" name="subID"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="LPL" id="QY_CN_LPL_EX">
+			<DA bType="VisString255" fc="DC" name="vendor"/>
+			<DA bType="VisString255" fc="DC" name="swRev"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="EX" name="lnNs">
+				<Val>SGCC MODEL: 2012</Val>
+			</DA>
+		</DOType>
+		<DOType cdc="STG" id="QY_CN_STG_SP_EX">
+			<DA bType="Unicode255" fc="SP" name="setVal"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="EX" name="cdcNs">
+				<Val>SGCC MODEL: 2012</Val>
+			</DA>
+			<DA bType="VisString255" fc="EX" name="cdcName"/>
+			<DA bType="VisString255" fc="EX" name="dataNs">
+				<Val>SGCC MODEL: 2012</Val>
+			</DA>
+		</DOType>
+		<DOType cdc="MV" id="JY42_CN_MV">
+			<DA bType="Struct" dchg="true" fc="MX" name="mag" type="CN_AnalogueValue"/>
+			<DA bType="Quality" fc="MX" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="MX" name="t"/>
+			<DA bType="BOOLEAN" fc="SV" name="subEna"/>
+			<DA bType="Struct" fc="SV" name="subMag" type="CN_AnalogueValue"/>
+			<DA bType="Quality" fc="SV" name="subQ"/>
+			<DA bType="VisString64" fc="SV" name="subID"/>
+			<DA bType="Struct" fc="CF" name="units" type="JY42_CN_units"/>
+			<DA bType="INT32U" fc="CF" name="db"/>
+			<DA bType="INT32U" fc="CF" name="zeroDb"/>
+			<DA bType="Struct" fc="CF" name="sVC" type="CN_ScaledValueConfig"/>
+			<DA bType="Struct" fc="CF" name="rangeC" type="CN_RangeConfig"/>
+			<DA bType="INT32U" fc="CF" name="smpRate"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="SPC" id="JY42_CN_SPC">
+			<DA bType="Struct" fc="CO" name="SBOw" type="CN_SBOw_Oper_SDPC"/>
+			<DA bType="Struct" fc="CO" name="Oper" type="CN_SBOw_Oper_SDPC"/>
+			<DA bType="Struct" fc="CO" name="Cancel" type="CN_Cancel_SDPC"/>
+			<DA bType="BOOLEAN" dchg="true" fc="ST" name="stVal"/>
+			<DA bType="Quality" fc="ST" name="q" qchg="true"/>
+			<DA bType="Timestamp" fc="ST" name="t"/>
+			<DA bType="BOOLEAN" fc="SV" name="subEna"/>
+			<DA bType="BOOLEAN" fc="SV" name="subVal"/>
+			<DA bType="Quality" fc="SV" name="subQ"/>
+			<DA bType="VisString64" fc="SV" name="subID"/>
+			<DA bType="Struct" fc="CF" name="pulseConfig" type="CN_PulseConfig"/>
+			<DA bType="Enum" fc="CF" name="ctlModel" type="ctlModel"/>
+			<DA bType="INT32U" fc="CF" name="sboTimeout"/>
+			<DA bType="Enum" fc="CF" name="sboClass" type="sboClass"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DOType cdc="ASG" id="JY42_CN_ASG_SP">
+			<DA bType="Struct" fc="SP" name="setMag" type="CN_AnalogueValue"/>
+			<DA bType="Struct" fc="CF" name="units" type="JY42_CN_units"/>
+			<DA bType="Struct" fc="CF" name="sVC" type="CN_ScaledValueConfig"/>
+			<DA bType="Struct" fc="CF" name="minVal" type="CN_AnalogueValue"/>
+			<DA bType="Struct" fc="CF" name="maxVal" type="CN_AnalogueValue"/>
+			<DA bType="Struct" fc="CF" name="stepSize" type="CN_AnalogueValue"/>
+			<DA bType="Unicode255" fc="DC" name="dU"/>
+			<DA bType="VisString255" fc="DC" name="d"/>
+		</DOType>
+		<DAType id="CN_PulseConfig">
+			<BDA bType="Enum" name="cmdQual" type="PulseConfigCmdQual"/>
+			<BDA bType="INT32U" name="onDur"/>
+			<BDA bType="INT32U" name="offDur"/>
+			<BDA bType="INT32U" name="numPls"/>
+		</DAType>
+		<DAType id="CN_ScaledValueConfig">
+			<BDA bType="FLOAT32" name="scaleFactor"/>
+			<BDA bType="FLOAT32" name="offset"/>
+		</DAType>
+		<DAType id="CN_Originator">
+			<BDA bType="Enum" name="orCat" type="orCategory"/>
+			<BDA bType="Octet64" name="orIdent"/>
+		</DAType>
+		<DAType id="CN_Cancel_SDPC">
+			<BDA bType="BOOLEAN" name="ctlVal"/>
+			<BDA bType="Struct" name="origin" type="CN_Originator"/>
+			<BDA bType="INT8U" name="ctlNum"/>
+			<BDA bType="Timestamp" name="T"/>
+			<BDA bType="BOOLEAN" name="Test"/>
+		</DAType>
+		<DAType id="CN_SBOw_Oper_SDPC">
+			<BDA bType="BOOLEAN" name="ctlVal"/>
+			<BDA bType="Struct" name="origin" type="CN_Originator"/>
+			<BDA bType="INT8U" name="ctlNum"/>
+			<BDA bType="Timestamp" name="T"/>
+			<BDA bType="BOOLEAN" name="Test"/>
+			<BDA bType="Check" name="Check"/>
+		</DAType>
+		<DAType id="CN_RangeConfig">
+			<BDA bType="Struct" name="hhLim" type="CN_AnalogueValue"/>
+			<BDA bType="Struct" name="hLim" type="CN_AnalogueValue"/>
+			<BDA bType="Struct" name="lLim" type="CN_AnalogueValue"/>
+			<BDA bType="Struct" name="llLim" type="CN_AnalogueValue"/>
+			<BDA bType="Struct" name="min" type="CN_AnalogueValue"/>
+			<BDA bType="Struct" name="max" type="CN_AnalogueValue"/>
+		</DAType>
+		<DAType id="CN_AnalogueValue">
+			<BDA bType="FLOAT32" name="f"/>
+		</DAType>
+		<DAType id="JY42_CN_units">
+			<BDA bType="Enum" name="SIUnit" type="JY42_SIUnit"/>
+			<BDA bType="Enum" name="multiplier" type="JY42_multiplier"/>
+		</DAType>
+		<EnumType id="PulseConfigCmdQual">
+			<EnumVal ord="0">pulse</EnumVal>
+			<EnumVal ord="1">persistent</EnumVal>
+		</EnumType>
+		<EnumType id="Health">
+			<EnumVal ord="1">Ok</EnumVal>
+			<EnumVal ord="2">Warning</EnumVal>
+			<EnumVal ord="3">Alarm</EnumVal>
+		</EnumType>
+		<EnumType id="Mod">
+			<EnumVal ord="1">on</EnumVal>
+			<EnumVal ord="2">blocked</EnumVal>
+			<EnumVal ord="3">test</EnumVal>
+			<EnumVal ord="4">test/blocked</EnumVal>
+			<EnumVal ord="5">off</EnumVal>
+		</EnumType>
+		<EnumType id="Beh">
+			<EnumVal ord="1">on</EnumVal>
+			<EnumVal ord="2">blocked</EnumVal>
+			<EnumVal ord="3">test</EnumVal>
+			<EnumVal ord="4">test/blocked</EnumVal>
+			<EnumVal ord="5">off</EnumVal>
+		</EnumType>
+		<EnumType id="orCategory">
+			<EnumVal ord="0">not-supported</EnumVal>
+			<EnumVal ord="1">bay-control</EnumVal>
+			<EnumVal ord="2">station-control</EnumVal>
+			<EnumVal ord="3">remote-control</EnumVal>
+			<EnumVal ord="4">automatic-bay</EnumVal>
+			<EnumVal ord="5">automatic-station</EnumVal>
+			<EnumVal ord="6">automatic-remote</EnumVal>
+			<EnumVal ord="7">maintenance</EnumVal>
+			<EnumVal ord="8">process</EnumVal>
+		</EnumType>
+		<EnumType id="sboClass">
+			<EnumVal ord="0">operate-once</EnumVal>
+			<EnumVal ord="1">operate-many</EnumVal>
+		</EnumType>
+		<EnumType id="ctlModel">
+			<EnumVal ord="0">status-only</EnumVal>
+			<EnumVal ord="1">direct-with-normal-security</EnumVal>
+			<EnumVal ord="2">sbo-with-normal-security</EnumVal>
+			<EnumVal ord="3">direct-with-enhanced-security</EnumVal>
+			<EnumVal ord="4">sbo-with-enhanced-security</EnumVal>
+		</EnumType>
+		<EnumType id="JY42_multiplier">
+			<EnumVal ord="-24">y</EnumVal>
+			<EnumVal ord="-21">z</EnumVal>
+			<EnumVal ord="-18">a</EnumVal>
+			<EnumVal ord="-15">f</EnumVal>
+			<EnumVal ord="-12">p</EnumVal>
+			<EnumVal ord="-9">n</EnumVal>
+			<EnumVal ord="-6">µ</EnumVal>
+			<EnumVal ord="-3">m</EnumVal>
+			<EnumVal ord="-2">c</EnumVal>
+			<EnumVal ord="-1">d</EnumVal>
+			<EnumVal ord="0"/>
+			<EnumVal ord="1">da</EnumVal>
+			<EnumVal ord="2">h</EnumVal>
+			<EnumVal ord="3">k</EnumVal>
+			<EnumVal ord="6">M</EnumVal>
+			<EnumVal ord="9">G</EnumVal>
+			<EnumVal ord="12">T</EnumVal>
+			<EnumVal ord="15">P</EnumVal>
+			<EnumVal ord="18">E</EnumVal>
+			<EnumVal ord="21">Z</EnumVal>
+			<EnumVal ord="24">Y</EnumVal>
+		</EnumType>
+		<EnumType id="JY42_SIUnit">
+			<EnumVal ord="1"/>
+			<EnumVal ord="2">m</EnumVal>
+			<EnumVal ord="3">kg</EnumVal>
+			<EnumVal ord="4">s</EnumVal>
+			<EnumVal ord="5">A</EnumVal>
+			<EnumVal ord="6">K</EnumVal>
+			<EnumVal ord="7">mol</EnumVal>
+			<EnumVal ord="8">cd</EnumVal>
+			<EnumVal ord="9">deg</EnumVal>
+			<EnumVal ord="10">rad</EnumVal>
+			<EnumVal ord="11">sr</EnumVal>
+			<EnumVal ord="21">Gy</EnumVal>
+			<EnumVal ord="22">q</EnumVal>
+			<EnumVal ord="23">°C</EnumVal>
+			<EnumVal ord="24">Sv</EnumVal>
+			<EnumVal ord="25">F</EnumVal>
+			<EnumVal ord="26">C</EnumVal>
+			<EnumVal ord="27">S</EnumVal>
+			<EnumVal ord="28">H</EnumVal>
+			<EnumVal ord="29">V</EnumVal>
+			<EnumVal ord="30">ohm</EnumVal>
+			<EnumVal ord="31">J</EnumVal>
+			<EnumVal ord="32">N</EnumVal>
+			<EnumVal ord="33">Hz</EnumVal>
+			<EnumVal ord="34">lx</EnumVal>
+			<EnumVal ord="35">Lm</EnumVal>
+			<EnumVal ord="36">Wb</EnumVal>
+			<EnumVal ord="37">T</EnumVal>
+			<EnumVal ord="38">W</EnumVal>
+			<EnumVal ord="39">Pa</EnumVal>
+			<EnumVal ord="41">m²</EnumVal>
+			<EnumVal ord="42">m³</EnumVal>
+			<EnumVal ord="43">m/s</EnumVal>
+			<EnumVal ord="44">m/s²</EnumVal>
+			<EnumVal ord="45">m³/s</EnumVal>
+			<EnumVal ord="46">m/m³</EnumVal>
+			<EnumVal ord="47">M</EnumVal>
+			<EnumVal ord="48">kg/m³</EnumVal>
+			<EnumVal ord="49">m²/s</EnumVal>
+			<EnumVal ord="50">W/m K</EnumVal>
+			<EnumVal ord="51">J/K</EnumVal>
+			<EnumVal ord="52">ppm</EnumVal>
+			<EnumVal ord="53">1/s</EnumVal>
+			<EnumVal ord="54">rad/s</EnumVal>
+			<EnumVal ord="61">VA</EnumVal>
+			<EnumVal ord="62">W</EnumVal>
+			<EnumVal ord="63">VAr</EnumVal>
+			<EnumVal ord="64">theta</EnumVal>
+			<EnumVal ord="65">cos(theta)</EnumVal>
+			<EnumVal ord="66">Vs</EnumVal>
+			<EnumVal ord="67">V²</EnumVal>
+			<EnumVal ord="68">As</EnumVal>
+			<EnumVal ord="69">A²</EnumVal>
+			<EnumVal ord="70">A²t</EnumVal>
+			<EnumVal ord="71">VAh</EnumVal>
+			<EnumVal ord="72">Wh</EnumVal>
+			<EnumVal ord="73">VArh</EnumVal>
+			<EnumVal ord="74">V/Hz</EnumVal>
+		</EnumType>
+	</DataTypeTemplates>
+</SCL>
