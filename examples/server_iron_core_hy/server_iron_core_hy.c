@@ -113,14 +113,10 @@ int main(int argc, char** argv)
     /* 你若想用“控制回调”来驱动 Alm11..14，请确保已在模型里把相应对象注册。
        注意：IedServer_setControlHandler 需要传 *可控对象*（通常是 SPCSOx/DPCSOx），
        不是普通 DataAttribute。，parameter 用 Alm11..14 自身： */
-    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm11,
-        (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm11);
-    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm12,
-        (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm12);
-    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm13,
-        (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm13);
-    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm14,
-        (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm14);
+    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm11, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm11);
+    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm12, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm12);
+    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm13, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm13);
+    IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm14, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm14);
 
     /* ---- 启动 ---- */
     IedServer_start(iedServer, tcpPort);
