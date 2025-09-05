@@ -8,6 +8,8 @@
         "iec61850_server.h": "c",
         "static_model.h": "c",
         "goose_receiver.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "mms_value.h": "c",
+        "sntp_client.h": "c"
     }
 }

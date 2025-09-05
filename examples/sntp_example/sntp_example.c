@@ -15,8 +15,7 @@ sigint_handler(int signalId)
     running = false;
 }
 
-static void
-sntpUserCallback(void* parameter, bool isSynced)
+static void sntpUserCallback(void* parameter, bool isSynced)
 {
     if (isSynced)
         printf("SNTP: Clock synchronized\n");
@@ -24,8 +23,7 @@ sntpUserCallback(void* parameter, bool isSynced)
         printf("SNTP: Clock not synchronized\n");
 }
 
-int
-main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     SNTPClient client = SNTPClient_create();
 
