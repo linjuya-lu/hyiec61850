@@ -3,6 +3,7 @@ LIBIEC_HOME=../..
 PROJECT_BINARY_NAME = server_iron_core_hy
 PROJECT_SOURCES = server_iron_core_hy.c
 PROJECT_SOURCES += static_model.c
+PROJECT_SOURCES += $(LIBIEC_HOME)/src/logging/drivers/sqlite/log_storage_sqlite.c
 
 PROJECT_ICD_FILE = MC_ICD_RFG.icd
 
@@ -13,7 +14,7 @@ all:	$(PROJECT_BINARY_NAME)
 
 include $(LIBIEC_HOME)/make/common_targets.mk
 
-LDLIBS += -lm
+LDLIBS += -lm -lsqlite3
 
 CP = cp
 

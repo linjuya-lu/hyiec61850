@@ -7,9 +7,6 @@
 
 #include "static_model.h"
 
-#include "logging_api.h"
-LogStorage SqliteLogStorage_createInstance(const char* filename);
-
 static int running = 0;
 static IedServer iedServer = NULL;
 
@@ -18,6 +15,7 @@ sigint_handler(int signalId)
 {
     running = 0;
 }
+
 
 
 static ControlHandlerResult
@@ -82,39 +80,30 @@ rcbEventHandler(void* parameter, ReportControlBlock* rcb, ClientConnection conne
 }
 
 
-//日志记录
-static void
-log_value(LogStorage ls, uint64_t entryID, const char* dataRef, MmsValue* v)
-{
-    uint8_t blob[256];
-    int sz = MmsValue_encodeMmsData(v, blob, 0, true);
-    LogStorage_addEntryData(ls, entryID, dataRef, blob, sz, 0);
-}
-
 int main(int argc, char** argv)
 {
     int tcpPort = 102;
     if (argc > 1) tcpPort = atoi(argv[1]);
 
-    printf("库版本 %s\n", LibIEC61850_getVersionString());
+    printf("Using libIEC61850 version %s\n", LibIEC61850_getVersionString());
 
-    // 服务器配置
+    /* ---- 服务器配置 ---- */
     IedServerConfig cfg = IedServerConfig_create();
     IedServerConfig_setEdition(cfg, IEC_61850_EDITION_2);
-    IedServerConfig_setReportBufferSize(cfg, 200000);       // 报告分配200KB缓冲
+    IedServerConfig_setReportBufferSize(cfg, 200000);       // 给所有 BRCB 分 200KB 缓冲
     IedServerConfig_enableFileService(cfg, true);
     IedServerConfig_setFileServiceBasePath(cfg, "./vmd-filestore/");
     IedServerConfig_enableDynamicDataSetService(cfg, true);
-    IedServerConfig_enableLogService(cfg, true);            // 日志服务
-    IedServerConfig_setMaxMmsConnections(cfg, 2);           //支持客户端数
+    IedServerConfig_enableLogService(cfg, false);
+    IedServerConfig_setMaxMmsConnections(cfg, 2);
 
-    //服务器创建
+    /* ---- 服务器创建 ---- */
     iedServer = IedServer_createWithConfig(&iedModel, NULL, cfg);
     IedServerConfig_destroy(cfg);                           
 
     IedServer_setServerIdentity(iedServer, "HY", "iron core", "1.6.0");
 
-    //连接/RCB 事件
+    /* 连接/RCB 事件 */
     IedServer_setConnectionIndicationHandler(iedServer, (IedConnectionIndicationHandler) connectionHandler, NULL);
     IedServer_setRCBEventHandler(iedServer, rcbEventHandler, NULL);
 
@@ -129,18 +118,11 @@ int main(int argc, char** argv)
     IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm13, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm13);
     IedServer_setControlHandler(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm14, (ControlHandler) controlHandlerForBinaryOutput, IEDMODEL_MONT_DGMGGIO1_Alm14);
 
-    //日志存储
-    LogStorage statusLog = SqliteLogStorage_createInstance("log_status.db");
-    LogStorage_setMaxLogEntries(statusLog, 1000);
-    
-    IedServer_setLogStorage(iedServer, "MONT/LLN0$EventLog", statusLog);
-
-    //启动
+    /* ---- 启动 ---- */
     IedServer_start(iedServer, tcpPort);
     if (!IedServer_isRunning(iedServer)) {
         printf("Starting server failed (need root? or port busy?)\n");
         IedServer_destroy(iedServer);
-        LogStorage_destroy(statusLog);
         return -1;
     }
 
@@ -210,30 +192,7 @@ int main(int argc, char** argv)
 
         IedServer_unlockDataModel(iedServer);
 
-        //将测量/告警写入日志数据库
-        uint64_t entryID = LogStorage_addEntry(statusLog, nowMs);
-
-        MmsValue* v;
-
-        v = MmsValue_newFloat(an1);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$CGAmp$mag$f", v);
-        MmsValue_delete(v);
-
-        v = MmsValue_newFloat(an2);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$ClpGAmp$mag$f", v);
-        MmsValue_delete(v);
-
-        v = MmsValue_newBoolean(cg);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$CGAlm$stVal", v);
-        MmsValue_delete(v);
-
-        v = MmsValue_newBoolean(clp);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$ClpGAlm$stVal", v);
-        MmsValue_delete(v);
-
-        v = MmsValue_newUtcTimeByMsTime(nowMs);
-        log_value(statusLog, entryID, "MONT/LLN0$ST$Health$t", v); 
-        MmsValue_delete(v);
+        IedServer_unlockDataModel(iedServer);
 
         Thread_sleep(1000);
     }
@@ -241,6 +200,5 @@ int main(int argc, char** argv)
     //退出清理
     IedServer_stop(iedServer);
     IedServer_destroy(iedServer);
-    LogStorage_destroy(statusLog);   
     return 0;
 }
