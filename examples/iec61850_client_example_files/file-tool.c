@@ -287,8 +287,41 @@ deleteFile(IedConnection con)
         printf("Failed to delete file! (code=%i)\n", error);
 }
 
-int
-main(int argc, char** argv)
+//显示单个文件的信息
+static void fileInfo(IedConnection con)
+{
+    if (filename == NULL || *filename == '\0') {   
+        printf("usage: file-tool info <filename>\n");
+        return;
+    }
+    IedClientError error;
+
+    LinkedList list = IedConnection_getFileDirectory(con, &error, NULL);
+
+    if (error != IED_ERROR_OK || list == NULL) {
+        printf("Error retrieving file directory\n");
+        return;
+    }
+
+    bool found = false;
+    for (LinkedList it = LinkedList_getNext(list); it; it = LinkedList_getNext(it)) {
+        FileDirectoryEntry e = (FileDirectoryEntry) it->data;
+        const char* name = FileDirectoryEntry_getFileName(e);
+        if (name && strcmp(name, filename) == 0) {
+            printf("info %s: size=%d\n", name, (int)FileDirectoryEntry_getFileSize(e));
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        printf("File not found in directory: .\n");
+
+    LinkedList_destroyDeep(list, (LinkedListValueDeleteFunction) FileDirectoryEntry_destroy);
+}
+
+
+int main(int argc, char** argv)
 {
     if (argc < 2) {
         printHelp();
@@ -322,6 +355,7 @@ main(int argc, char** argv)
             deleteFile(con);
             break;
         case FileOperationType_Info:
+            fileInfo(con);
             break;
         case FileOperationType_Set:
             setFile(con);

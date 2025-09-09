@@ -11,6 +11,7 @@
         "signal.h": "c",
         "mms_value.h": "c",
         "sntp_client.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "libgen.h": "c"
     }
 }
