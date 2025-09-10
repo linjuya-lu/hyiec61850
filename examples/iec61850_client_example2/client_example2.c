@@ -1,9 +1,3 @@
-/*
- * client_example2.c
- *
- * This example shows how to browse the data model of an unknown device.
- */
-
 #include "iec61850_client.h"
 
 #include <stdlib.h>

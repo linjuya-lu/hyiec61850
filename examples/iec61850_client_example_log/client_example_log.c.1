@@ -69,12 +69,12 @@ int main(int argc, char** argv) {
     if (error == IED_ERROR_OK) {
 
         /* read list of logs in LN (optional - if you don't know the existing logs) */
-        LinkedList logs = IedConnection_getLogicalNodeDirectory(con, &error, "MONT/LLN0", ACSI_CLASS_LOG);
+        LinkedList logs = IedConnection_getLogicalNodeDirectory(con, &error, "simpleIOGenericIO/LLN0", ACSI_CLASS_LOG);
 
         if (error == IED_ERROR_OK) {
 
             if (LinkedList_size(logs) > 0) {
-                printf("Found logs in LN MONT/LLN0:\n");
+                printf("Found logs in LN simpleIOGenericIO/LLN0:\n");
 
                 LinkedList log = LinkedList_getNext(logs);
 
@@ -94,7 +94,7 @@ int main(int argc, char** argv) {
         }
 
         /* read log control block (using the generic read function) */
-        MmsValue* lcbValue = IedConnection_readObject(con, &error, "MONT/LLN0.EventLog", IEC61850_FC_LG);
+        MmsValue* lcbValue = IedConnection_readObject(con, &error, "simpleIOGenericIO/LLN0.EventLog", IEC61850_FC_LG);
 
         if ((error == IED_ERROR_OK) && (MmsValue_getType(lcbValue) != MMS_DATA_ACCESS_ERROR)) {
 
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
              * read the log contents. Be aware that the logRef uses the '$' sign as separator between the LN and
              * the log name! This is in contrast to the LCB object reference above.
              */
-            LinkedList logEntries = IedConnection_queryLogAfter(con, &error, "MONT/LLN0$EventLog", oldEntry, timestamp, &moreFollows);
+            LinkedList logEntries = IedConnection_queryLogAfter(con, &error, "simpleIOGenericIO/LLN0$EventLog", oldEntry, timestamp, &moreFollows);
 
             if (error == IED_ERROR_OK) {
                 printJournalEntries(logEntries);
