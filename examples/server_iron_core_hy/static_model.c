@@ -15580,15 +15580,7 @@ ReportControlBlock iedModel_MONT_LLN0_report31 = {&iedModel_MONT_LLN0, "brcbAlar
 
 
 
-extern LogControlBlock iedModel_MONT_LLN0_lcb0;
-extern LogControlBlock iedModel_MONT_LLN0_lcb1;
-LogControlBlock iedModel_MONT_LLN0_lcb0 = {&iedModel_MONT_LLN0, "EventLog", "dsAin1", "MONT/LLN0$EventLog", 3, 0, true, true, &iedModel_MONT_LLN0_lcb1};
-LogControlBlock iedModel_MONT_LLN0_lcb1 = {&iedModel_MONT_LLN0, "GeneralLog", NULL, NULL, 3, 0, true, true, NULL};
 
-extern Log iedModel_MONT_LLN0_log0;
-extern Log iedModel_MONT_LLN0_log1;
-Log iedModel_MONT_LLN0_log0 = {&iedModel_MONT_LLN0, "GeneralLog", &iedModel_MONT_LLN0_log1};
-Log iedModel_MONT_LLN0_log1 = {&iedModel_MONT_LLN0, "EventLog", NULL};
 
 
 IedModel iedModel = {
@@ -15599,8 +15591,8 @@ IedModel iedModel = {
     NULL,
     NULL,
     NULL,
-    &iedModel_MONT_LLN0_lcb0,
-    &iedModel_MONT_LLN0_log0,
+    NULL,
+    NULL,
     initializeValues
 };
 

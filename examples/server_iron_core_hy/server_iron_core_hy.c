@@ -147,96 +147,104 @@ int main(int argc, char** argv)
     running = 1;
     signal(SIGINT, sigint_handler);
 
+
+    // 控制更新频率：每隔多少毫秒更新一次模型（这里示例为 5000 ms = 5 s）
+    const uint64_t updateIntervalMs = 5000;
+    uint64_t lastUpdateMs = 0;
+
     float t = 0.f;
     while (running) {
         uint64_t nowMs = Hal_getTimeInMs();
+        // 增量时间用于生成周期性波形（仅在更新时增长，或也可按实际时间增长）
         t += 0.1f;
 
-        /* ---- 模拟两个电流---- 
-        直流基值 + 正弦摆动 + 一点高频抖动 + 少量随机噪声
-        */
-        float base1 = 5.0f, base2 = 3.5f;   // 5A / 3.5A基值（A）
-        float ac1   = 0.5f*sinf(t);         // 低频摆动
-        float ac2   = 0.4f*sinf(t+1.0f);
+        // 只有在超过 updateIntervalMs 时才实际改变模型并写日志
+        if (nowMs - lastUpdateMs >= updateIntervalMs) {
+            lastUpdateMs = nowMs;
 
-        float ripple1 = 2.0f * sinf(0.35f * t);  // 轻微涟波
-        float ripple2 = 1.8f * sinf(0.42f * t);
-        float noise1 =  ((rand() % 200) - 100) / 1000.0f; // ±0.1A 噪声
-        float noise2 =  ((rand() % 200) - 100) / 1000.0f;
+            /* ---- 模拟两个电流 ----
+               直流基值 + 正弦摆动 + 一点高频抖动 + 少量随机噪声
+            */
+            float base1 = 5.0f, base2 = 3.5f;   // 5A / 3.5A基值（A）
+            float ac1   = 0.5f * sinf(t);      // 低频摆动
+            float ac2   = 0.4f * sinf(t + 1.0f);
 
-        float an1 = base1 + ac1 + ripple1 + noise1;  // 铁芯电流（CGAmp）
-        float an2 = base2 + ac2 + ripple2 + noise2;  // 夹件电流（ClpGAmp）
+            float ripple1 = 2.0f * sinf(0.35f * t);  // 轻微涟波
+            float ripple2 = 1.8f * sinf(0.42f * t);
+            float noise1 = ((rand() % 200) - 100) / 1000.0f; // ±0.1A 噪声
+            float noise2 = ((rand() % 200) - 100) / 1000.0f;
 
+            float an1 = base1 + ac1 + ripple1 + noise1;  // 铁芯电流（CGAmp）
+            float an2 = base2 + ac2 + ripple2 + noise2;  // 夹件电流（ClpGAmp）
 
-        const uint64_t tzOffsetMs = 8ULL * 60ULL * 60ULL * 1000ULL; // +8 小时
-        Timestamp ts;
-        Timestamp_clearFlags(&ts);
-        Timestamp_setTimeInMilliseconds(&ts, nowMs + tzOffsetMs); //偏移
-        Timestamp_setLeapSecondKnown(&ts, true);
-        if (((int)t % 2) == 0) Timestamp_setClockNotSynchronized(&ts, true);
+            const uint64_t tzOffsetMs = 8ULL * 60ULL * 60ULL * 1000ULL; // +8 小时
+            Timestamp ts;
+            Timestamp_clearFlags(&ts);
+            Timestamp_setTimeInMilliseconds(&ts, nowMs + tzOffsetMs); // 偏移
+            Timestamp_setLeapSecondKnown(&ts, true);
+            if (((int)t % 2) == 0) Timestamp_setClockNotSynchronized(&ts, true);
 
-        IedServer_lockDataModel(iedServer);
+            IedServer_lockDataModel(iedServer);
 
-        //铁芯电流与夹件电流 
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAmp_mag_f,  an1);
-        IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAmp_mag_f, an2);
-        //时间戳
-        IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAmp_t,  &ts);
-        IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAmp_t, &ts);
-        
+            // 更新测量值与时间戳
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAmp_mag_f,  an1);
+            IedServer_updateFloatAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAmp_mag_f, an2);
+            IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAmp_t,  &ts);
+            IedServer_updateTimestampAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAmp_t, &ts);
 
-        //告警
-        static bool flip1 = false, flip2 = false, flip3 = false;
-        flip1 = !flip1;               
-        if (((int)t % 3) == 0) flip2 = !flip2;
-        if (((int)t % 5) == 0) flip3 = !flip3;
+            // 告警模拟（按 t 的周期翻转）
+            static bool flip1 = false, flip2 = false, flip3 = false;
+            flip1 = !flip1;
+            if (((int)t % 3) == 0) flip2 = !flip2;
+            if (((int)t % 5) == 0) flip3 = !flip3;
 
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm1_stVal, flip1);
-        IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm1_t,    Hal_getTimeInMs());
+            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm1_stVal, flip1);
+            IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm1_t,    Hal_getTimeInMs());
 
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm2_stVal, flip2);
-        IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm2_t,    Hal_getTimeInMs());
+            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm2_stVal, flip2);
+            IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm2_t,    Hal_getTimeInMs());
 
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm3_stVal, flip3);
-        IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm3_t,    Hal_getTimeInMs());
+            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_DGMGGIO1_Alm3_stVal, flip3);
+            IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_DGMGGIO1_Alm3_t,    Hal_getTimeInMs());
 
-        //铁芯电流、夹件电流
-        bool cg = (an1 > 0.5f);
-        bool clp = (an2 > 0.5f);
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAlm_stVal,   cg);
-        IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_CCMSPTR1_CGAlm_t,     Hal_getTimeInMs());
-        IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAlm_stVal, clp);
-        IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_CCMSPTR1_ClpGAlm_t,   Hal_getTimeInMs());
+            // 基于门槛的布尔告警
+            bool cg = (an1 > 0.5f);
+            bool clp = (an2 > 0.5f);
+            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_CGAlm_stVal,   cg);
+            IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_CCMSPTR1_CGAlm_t,     Hal_getTimeInMs());
+            IedServer_updateBooleanAttributeValue(iedServer, IEDMODEL_MONT_CCMSPTR1_ClpGAlm_stVal, clp);
+            IedServer_updateUTCTimeAttributeValue(iedServer,   IEDMODEL_MONT_CCMSPTR1_ClpGAlm_t,   Hal_getTimeInMs());
 
-        IedServer_unlockDataModel(iedServer);
+            IedServer_unlockDataModel(iedServer);
 
-        //将测量/告警写入日志数据库
-        uint64_t entryID = LogStorage_addEntry(statusLog, nowMs);
+            // 将测量/告警写入日志数据库
+            uint64_t entryID = LogStorage_addEntry(statusLog, nowMs);
 
-        MmsValue* v;
+            MmsValue* v;
+            v = MmsValue_newFloat(an1);
+            log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$CGAmp$mag$f", v);
+            MmsValue_delete(v);
 
-        v = MmsValue_newFloat(an1);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$CGAmp$mag$f", v);
-        MmsValue_delete(v);
+            v = MmsValue_newFloat(an2);
+            log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$ClpGAmp$mag$f", v);
+            MmsValue_delete(v);
 
-        v = MmsValue_newFloat(an2);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$MX$ClpGAmp$mag$f", v);
-        MmsValue_delete(v);
+            v = MmsValue_newBoolean(cg);
+            log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$CGAlm$stVal", v);
+            MmsValue_delete(v);
 
-        v = MmsValue_newBoolean(cg);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$CGAlm$stVal", v);
-        MmsValue_delete(v);
+            v = MmsValue_newBoolean(clp);
+            log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$ClpGAlm$stVal", v);
+            MmsValue_delete(v);
 
-        v = MmsValue_newBoolean(clp);
-        log_value(statusLog, entryID, "MONT/CCMSPTR1$ST$ClpGAlm$stVal", v);
-        MmsValue_delete(v);
+            v = MmsValue_newUtcTimeByMsTime(nowMs);
+            log_value(statusLog, entryID, "MONT/LLN0$ST$Health$t", v);
+            MmsValue_delete(v);
+        } // end if (time to update)
 
-        v = MmsValue_newUtcTimeByMsTime(nowMs);
-        log_value(statusLog, entryID, "MONT/LLN0$ST$Health$t", v); 
-        MmsValue_delete(v);
-
+        // 每次循环短暂休眠，降低 CPU 占用并响应 SIGINT
         Thread_sleep(1000);
-    }
+    } // end while
 
     //退出清理
     IedServer_stop(iedServer);
