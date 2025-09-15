@@ -19,7 +19,7 @@
 					<P type="OSI-PSEL">00000001</P>
 					<P type="OSI-SSEL">0001</P>
 					<P type="OSI-TSEL">0001</P>
-					<P type="IP">172.16.19.101</P>
+					<P type="IP">192.168.75.137</P>
 				</Address>
 			</ConnectedAP>
 		</SubNetwork>
